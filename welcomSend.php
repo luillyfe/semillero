@@ -1,15 +1,18 @@
 <?php
 
-/**/
+session_start();
+if( empty($_SESSION["id"]) ):
+	header("HTTP/1.1 401 Not autorizado");
+	exit ("No autorizado");
+endif;
 
-include("conexion.php");
+include("/db/conexion.php");
 $db = new MySQL();
 
-$textHome 		= empty($_POST['textHome'])?		'' :trim(htmlspecialchars($_POST['textHome']));
-$textObjetiveG 	= empty($_POST['textObjetiveG'])?	'' :trim(htmlspecialchars($_POST['textObjetiveG']));
-$textObjetiveE 	= empty($_POST['textObjetiveE'])?	'' :trim(htmlspecialchars($_POST['textObjetiveE']));
-$textMision 	= empty($_POST['textMision'])?		'' :trim(htmlspecialchars($_POST['textMision']));
-$textVision 	= empty($_POST['textVision'])?		'' :trim(htmlspecialchars($_POST['textVision']));
+$textInformation = empty($_POST['textInformation'])?	'' :trim(htmlspecialchars($_POST['textInformation']));
+$textNotice 	 = empty($_POST['textNotice'])?	'' :trim(htmlspecialchars($_POST['textNotice']));
+$textTitulo 	 = empty($_POST['textTitulo'])?	'' :trim(htmlspecialchars($_POST['textTitulo']));
+$send 			 = empty($_POST['send'])?				'' :trim(htmlspecialchars($_POST['send']));
 
 $textproyecto = empty($_POST['textproyecto'])? 	''	:trim(htmlspecialchars( $_POST['textproyecto'] ));
 $index        = empty($_POST['index'])? 		''	:trim(htmlspecialchars( $_POST['index'] ));
@@ -24,58 +27,25 @@ $textnombre	  = empty($_POST['textnombre'])? 	''	:trim(htmlspecialchars( $_POST[
 $textapellido = empty($_POST['textapellido'])? 	''	:trim(htmlspecialchars( $_POST['textapellido'] ));
 $idIntegrante = $idIntegrante + 1; 
 
-if (	$textHome <> '' ): 
+if ( $textInformation <> '' ): 
 	$db->consulta(" UPDATE informacion 
-					SET descripcion_informacion='".$textHome."' 
-					WHERE idInformacion=3 ");
-	echo $textHome;
+					SET descripcion_informacion='".$textInformation."',
+						Integrante_idIntegrante=".$_SESSION["id"]." 
+					WHERE idInformacion=".$send." ");
+	echo $textInformation;
 ?>
-<input type="button" class="edit" value="editar" onclick='edit(1)' />
+<input type="button" class="edit" value="editar" onclick='edit(<?= $send ?>)' />
 
 <?php
-elseif ( $textObjetiveG <> '' ): 
+elseif ( $textNotice <> '' ): 
 	$db->consulta(" UPDATE informacion 
-					SET descripcion_informacion='".$textObjetiveG."' 
-					WHERE idInformacion=4 ");
-	echo $textObjetiveG;
+					SET descripcion_informacion='".$textNotice."',
+						titulo_informacion='".$textTitulo."',
+						Integrante_idIntegrante=".$_SESSION["id"]." 
+					WHERE idInformacion=".$send." ");
+	echo $textNotice;
 ?>
-<input type="button" class="edit" value="editar" onclick='edit(2)' />
-
-<?php
-elseif ( $textObjetiveE <> '' ): 
-	$db->consulta(" UPDATE informacion 
-					SET descripcion_informacion='".$textObjetiveE."' 
-					WHERE idInformacion=5 ");
-	echo $textObjetiveE;
-?>
-<input type="button" class="edit" value="editar" onclick='edit(3)' />
-
-<?php
-elseif ( $textMision <> '' ): 
-	$db->consulta(" UPDATE informacion 
-					SET descripcion_informacion='".$textMision."' 
-					WHERE idInformacion=1 ");
-	echo $textMision;
-?>
-<input type="button" class="edit" value="editar" onclick='edit(4)' />
-
-<?php
-elseif ( $textVision <> '' ): 
-	$db->consulta(" UPDATE informacion 
-					SET descripcion_informacion='".$textVision."' 
-					WHERE idInformacion=2 ");
-	echo $textVision;
-?>
-<input type="button" class="edit" value="editar" onclick='edit(5)' />
-
-<?php
-elseif ( $textVision <> '' ): 
-	$db->consulta(" UPDATE informacion 
-					SET descripcion_informacion='".$textVision."' 
-					WHERE idInformacion=2 ");
-	echo $textVision;
-?>
-<input type="button" class="edit" value="editar" onclick='edit(5)' />
+<input type="button" class="edit" value="editar" onclick='edit(<?= $send ?>)' />
 
 <?php
 elseif ( $textproyecto <> '' ): 
@@ -84,11 +54,12 @@ elseif ( $textproyecto <> '' ):
                 		nombre_proyecto='".$texttitulo."',
                 		fin_proyecto='".$textfin."',
                 		inicio_proyecto='".$textinicio."',
-                		estado_proyecto='".$textestado."'
+                		estado_proyecto='".$textestado."',
+                		Integrante_idIntegrante=".$_SESSION["id"]."
                 	WHERE idProyecto=".$index." ");
 	echo $textproyecto;
 ?>
-<input type="button" class="edit" value="Editar" onclick="edit('<?php echo $index; ?>')" />
+<input type="button" class="edit" value="Editar" onclick="edit('<?= $index; ?>')" />
 
 <?php
 elseif ( $textnombre <> '' ): 
@@ -98,7 +69,7 @@ elseif ( $textnombre <> '' ):
                 	WHERE idIntegrante=".$idIntegrante." ");
 	echo $textnombre;
 ?>
-<input type="button" class="edit" value="Editar" onclick="edit('<?php echo $idIntegrante; ?>')" />
+<input type="button" class="edit" value="Editar" onclick="edit('<?= $idIntegrante; ?>')" />
 
 <?php else: echo exit("ERROR"); ?>
 <?php endif; ?>

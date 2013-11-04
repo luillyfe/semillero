@@ -1,56 +1,51 @@
 <?php
-$welcome 	= trim(htmlspecialchars($_POST['welcome']));
-$objetiveG 	= trim(htmlspecialchars($_POST['objetiveG']));
-$objetiveE 	= trim(htmlspecialchars($_POST['objetiveE']));
-$mision 	= trim(htmlspecialchars($_POST['mision']));
-$vision 	= trim(htmlspecialchars($_POST['vision']));
 
-$index 		= trim(htmlspecialchars( $_POST['index'] ));
-$idIntegrante = trim(htmlspecialchars( $_POST['idIntegrante'] ));
+session_start();
+if( empty($_SESSION["id"]) ):
+	header("HTTP/1.1 401 Not autorizado");
+	exit ("No autorizado");
+endif;
+
+$information	= trim(htmlspecialchars($_POST['information']));
+$edit 			= trim(htmlspecialchars( $_POST['edit'] ));
+
+$index 			= trim(htmlspecialchars( $_POST['index'] ));
+$idIntegrante 	= trim(htmlspecialchars( $_POST['idIntegrante'] ));
 ?>
-<div id="editHome" >
-	<textarea id="textHome" ><?php echo $welcome ?></textarea>
-	<input type="button" class="edit" value="Enviar" onclick='send(1)' />
+<div class="editInformation" >
+	<textarea class="textEdit" id="textInformation<?= $edit ?>" required>
+	<?= $information ?></textarea>
+	<input type="button" class="edit" value="Enviar" 
+		onclick="send('<?= $edit ?>')" />
 </div>
 
-<div id="editObjetiveG">
-	<textarea id="textObjetiveG" ><?php echo $objetiveG ?></textarea>
-	<input type="button" class="edit" value="Enviar" onclick='send(2)' />
+<div class="editNotice" >
+	<input type="text" placeholder="titulo" id="titulo<?= $edit; ?>"
+		value="<?= trim( htmlspecialchars($_POST['titulo']) ) ?>" required/>
+	<textarea class="textEdit" id="textInformation<?= $edit ?>" required>
+	<?= $information ?></textarea>
+	<input type="button" class="edit" value="Enviar" 
+		onclick="send('<?= $edit ?>')" />
 </div>
 
-<div id="editObjetiveE">
-	<textarea id="textObjetiveE" ><?php echo $objetiveE ?></textarea>
-	<input type="button" class="edit" value="Enviar" onclick='send(3)' />
+<div class="editProyecto">
+	<input type="text" placeholder="titulo del proyecto" id="titulo<?= $index; ?>"
+		value="<?= trim( htmlspecialchars($_POST['tituloProyecto']) ) ?>" required/>
+	<input type="date" placeholder="fecha de entrega" id="fin<?= $index; ?>"
+		value="<?= htmlspecialchars( $_POST['finProyecto'] ) ?>" required/>
+	<textarea class="textEdit" placeholder="descripcion" id="<?= $index; ?>" 
+		required><?= trim(htmlspecialchars( $_POST['proyecto'] )) ?></textarea>
+	<input type="text" placeholder="fecha de inicio" id="inicio<?= $index; ?>"
+		value="<?= htmlspecialchars( $_POST['inicioProyecto'] ) ?>" required/>
+	<input type="text" placeholder="estado del proyecto" id="estado<?= $index; ?>"
+		value="<?= htmlspecialchars( $_POST['estado'] ) ?>" required/>
+	<input type="button" class="edit" value="Enviar" onclick="send('<?= $index; ?>')" />
 </div>
 
-<div id="editMision">
-	<textarea id="textMision" ><?php echo $mision ?></textarea>
-	<input type="button" class="edit" value="Enviar" onclick='send(4)' />
-</div>
-
-<div id="editVision">
-	<textarea id="textVision" ><?php echo $vision ?></textarea>
-	<input type="button" class="edit" value="Enviar" onclick='send(5)' />
-</div>
-
-<div id="editProyecto">
-	<input type="text" placeholder="titulo del proyecto" id="titulo<?php echo $index; ?>"
-		value="<?php echo htmlspecialchars( $_POST['tituloProyecto'] ) ?>" />
-	<input type="date" placeholder="fecha de entrega" id="fin<?php echo $index; ?>"
-		value="<?php echo htmlspecialchars( $_POST['finProyecto'] ) ?>" />
-	<textarea class="textEdit" placeholder="descripcion" id="<?php echo $index; ?>" 
-		><?php echo trim(htmlspecialchars( $_POST['proyecto'] )) ?></textarea>
-	<input type="text" placeholder="fecha de inicio" id="inicio<?php echo $index; ?>"
-		value="<?php echo htmlspecialchars( $_POST['inicioProyecto'] ) ?>" />
-	<input type="text" placeholder="estado del proyecto" id="estado<?php echo $index; ?>"
-		value="<?php echo htmlspecialchars( $_POST['estado'] ) ?>" />
-	<input type="button" class="edit" value="Enviar" onclick="send('<?php echo $index; ?>')" />
-</div>
-
-<div id="editIntegrante" >
-	<input type="text" placeholder="nombre" id="nombre<?php echo $idIntegrante; ?>" 
-		value="<?php echo trim(htmlspecialchars( $_POST['nombre'] )) ?>" />
-	<input type="text" placeholder="apellido" id="apellido<?php echo $idIntegrante; ?>" 
-		value="<?php echo trim(htmlspecialchars( $_POST['apellido'] )) ?>" />
-	<input type="button" class="edit" value="Enviar" onclick="send('<?php echo $idIntegrante; ?>')" />
+<div class="editIntegrante" >
+	<input type="text" placeholder="nombre" id="nombre<?= $idIntegrante; ?>" 
+		value="<?= trim(htmlspecialchars( $_POST['nombre'] )) ?>" required/>
+	<input type="text" placeholder="apellido" id="apellido<?= $idIntegrante; ?>" 
+		value="<?= trim(htmlspecialchars( $_POST['apellido'] )) ?>" required/>
+	<input type="button" class="edit" value="Enviar" onclick="send('<?= $idIntegrante; ?>')" />
 </div>

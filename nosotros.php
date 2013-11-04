@@ -1,12 +1,15 @@
 <?php
 
-include("conexion.php");
+session_start();
+if ( !isset($_SESSION['autor']) ){ $_SESSION['autor'] = array_fill(1, 100, "Inicia session"); }
 
+include("/db/conexion.php");
 $db = new MySQL();
-$consulta = $db->consulta("	SELECT descripcion_informacion 
-							FROM informacion 
-							WHERE titulo_informacion = 'Mision' 
-							OR titulo_informacion = 'Vision'");
+$information = $db->consulta("SELECT idInformacion, titulo_informacion,
+                                  descripcion_informacion, Integrante_idIntegrante
+							               FROM informacion 
+							               WHERE titulo_informacion = 'Mision' 
+							               OR titulo_informacion = 'Vision'");
 ?>
 
 <!DOCTYPE HTML>
@@ -14,8 +17,8 @@ $consulta = $db->consulta("	SELECT descripcion_informacion
 
 <head>
   <title>Unisimon</title>
-  <meta name="description" content="Semillero de tecnologias de la informacion
-    y comunicacion de la Universidad Simon Bolivar" />
+  <meta name="description" content="Quienes somos y para donde vamos, Mision y Vision del
+                                    semillero." />
 
   <meta name="keywords" content="semillero unisimon, tecnologia" />
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -34,7 +37,13 @@ $consulta = $db->consulta("	SELECT descripcion_informacion
           <li class="current"><a href="nosotros.php">Nosotros</a></li>
           <li><a href="integrantes.php">Integrantes</a></li>
           <li><a href="proyectos.php">Proyectos</a></li>
-          <li><a href="#">Unisimon</a></li>
+          <li><a href="informacion.php">Mas+</a></li>
+          <?php if( empty($_SESSION["id"]) ):
+                  echo "<li><a href='signin.php'>Sign in</a></li>";
+
+                else: echo "<li><a href='signout.php'>Sign out</a></li>";   
+                endif; 
+          ?>
         </ul>
       </nav>
     </header>
@@ -48,26 +57,25 @@ $consulta = $db->consulta("	SELECT descripcion_informacion
         </div>
       </div>
       <div id="content">
-        <h1>Mision</h1>
-        <p class="welcome" id="mision"><?php $resultados = $db->fetch_array($consulta);
-        		echo $resultados['descripcion_informacion']."<br />";
-        	?>
-          <input type="button" class="edit" value="Editar" onclick='edit(4)' />
-        </p>
-        <h1>Vision</h1>
-        <p class="welcome" id="vision" ><?php $resultados = $db->fetch_array($consulta);
-        		echo $resultados['descripcion_informacion']."<br />";
-        	?>
-          <input type="button" class="edit" value="Editar" onclick='edit(5)' />
-        </p>
+        <?php for($i=0;$i<2;$i++): $rowInformation = $db->fetch_array($information) ?>
+        <h1><?= $rowInformation['titulo_informacion'] ?></h1>
+        <p class="welcome" id="information<?= $rowInformation['idInformacion'] ?>">
+          <?= $rowInformation['descripcion_informacion'] ?>
+          <input type="button" class="edit" value="Editar" 
+            onclick="edit('<?= $rowInformation['idInformacion'] ?>')" />
+          <input type="button" class="edit" 
+            value="<?= $_SESSION['autor'][$rowInformation['Integrante_idIntegrante']] ?>" />
+        </p><?php endfor; ?>       
       </div>
     </div>
     <footer>
       <p><a href="index.php">AdiTIC</a> | <a href="nosotros.php">Nosotros</a> | <a href="integrantes.php">Integrantes</a> 
-      | <a href="proyectos.php">Proyectos</a> | <a href="#">Unisimon</a></p>
+      | <a href="proyectos.php">Proyectos</a> | <a href="informacion.php">Mas+</a> |
+      <p>Copyright &copy; CSS3_grass | <a href="http://www.css3templates.co.uk">design from css3templates.co.uk</a></p>
     </footer>
   </div>
   <!-- javascript at the bottom for fast page loading -->
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <script type="text/javascript" src="js/jquery.easing.min.js"></script>
   <script type="text/javascript" src="js/jquery.lavalamp.min.js"></script>
@@ -80,40 +88,18 @@ $consulta = $db->consulta("	SELECT descripcion_informacion
       });
     });
   </script>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
   <script type="text/javascript">
-    function edit(edit) { 
-      //alert($(".welcome:last").text());
-      switch(edit){
-        case 4:
-          var mision = $(".welcome:first").text(); 
-          $("#mision").load('welcomEdit.php #editMision', {  mision:mision });
-          break;
-        case 5:
-          var vision = $(".welcome:last").text();
-          $("#vision").load('welcomEdit.php #editVision', { vision:vision });
-          break;
+    <?php if( empty($_SESSION["id"]) ) { echo "!·$%&)/)=?¿"; } ?>
 
-        default: break;
-      } 
+    function edit(edit) {
+      var information = $("p#information"+edit).text();
+      $("p#information"+edit).load("welcomEdit.php .editInformation", { information:information, edit:edit });
     }
+            
     function send(send) { 
-      //alert($('#textObjetiveE').val());
-      switch(send){
-        case 4: 
-          var textMision = $('#textMision').val();
-          $("#mision").load('welcomSend.php', { textMision:textMision});
-          break;
-        case 5:
-          var textVision = $('#textVision').val();
-          $("#vision").load('welcomSend.php', { textVision:textVision });
-          break;
-
-        default: break;
-      } 
-
+      var textInformation = $('#textInformation'+send).val();
+      $('p#information'+send).load( 'welcomSend.php', { textInformation:textInformation, send:send });
     }
-
   </script>
 </body>
 </html>

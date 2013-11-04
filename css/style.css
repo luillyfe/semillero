@@ -219,11 +219,12 @@ nav {
 p.name {
   padding: 0;
 }
+
 h3.state {
   padding: 0 0 20px 0;
 }
 
-#textHome, #textObjetiveG, #textObjetiveE, #textMision, #textVision, .textEdit {
+.textEdit {
   width: 405px; 
   height: 162px;
 }

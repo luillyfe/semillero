@@ -3,9 +3,10 @@
 include("conexion.php");
 
 $db = new MySQL();
-$consulta = $db->consulta(" SELECT descripcion_informacion 
+$consulta = $db->consulta(" SELECT descripcion_informacion,
+                                   Integrante_idIntegrante 
                             FROM informacion 
-                            WHERE titulo_informacion = 'Nosotros' 
+                            WHERE titulo_informacion = 'Home' 
                             OR titulo_informacion = 'Objetivo general'
                             OR titulo_informacion = 'Objetivos especificos'");
 ?>
@@ -52,22 +53,29 @@ $consulta = $db->consulta(" SELECT descripcion_informacion
         </div>
       </div>
       <div id="content">
+        
         <h1>Bienvenidos al semillero</h1>
-        <span id="welcome" ><?php $resultados = $db->fetch_array($consulta);
-            echo $resultados['descripcion_informacion']."<br />";
-          ?>
-          <ul>
-            <li><a>Editar</a></li>
-          </ul>
-        </span>        
+        <p class="welcome" id="home" >
+          <?php $resultados = $db->fetch_array($consulta);
+            echo $resultados['descripcion_informacion'];
+          ?>  
+          <input type="button" class="edit" value="Editar" onclick='edit(1)' />
+        </p>
+
         <h2>Objetivo general</h2>
-        <p><?php $resultados = $db->fetch_array($consulta);
-            echo $resultados['descripcion_informacion']."<br />";
-          ?></p>
-        <h2>Objetivos especificos:</h2>
-        <ul><?php $resultados = $db->fetch_array($consulta);
-            echo $resultados['descripcion_informacion']."<br />";
+        <p class="welcome" id="objetiveG" >
+          <?php $resultados = $db->fetch_array($consulta);
+            echo $resultados['descripcion_informacion'];
           ?>
+          <input type="button" class="edit" value="Editar" onclick='edit(2)' />
+        </p>
+        
+        <h2>Objetivos especificos:</h2>
+        <ul class="welcome" id="objetiveE">
+          <?php $resultados = $db->fetch_array($consulta);
+            echo $resultados['descripcion_informacion'];
+          ?>
+          <input type="button" class="edit" value="Editar" onclick='edit(3)' />
         </ul>
       </div>
     </div>
@@ -88,6 +96,47 @@ $consulta = $db->consulta(" SELECT descripcion_informacion
         speed: 700
       });
     });
+  </script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript">
+    function edit(edit) { 
+      switch(edit){
+        case 1:
+          var welcome = $(".welcome:first").text(); 
+          $("#home").load('welcomEdit.php #editHome', {  welcome:welcome });
+          break;
+        case 2:
+          var objetiveG = $("p.welcome:last").text();
+          $("#objetiveG").load('welcomEdit.php #editObjetiveG', { objetiveG:objetiveG });
+          break;
+        case 3:
+          var objetiveE = $(".welcome:last").text();
+          $("#objetiveE").load('welcomEdit.php #editObjetiveE', { objetiveE:objetiveE });
+          break;
+
+        default: break;
+      } 
+    }
+
+    function send(send) { 
+      switch(send){
+        case 1: 
+          var textHome = $('#textHome').val();
+          $("#home").load('welcomSend.php', { textHome:textHome});
+          break;
+        case 2:
+          var textObjetiveG = $('#textObjetiveG').val();
+          $("#objetiveG").load('welcomSend.php', { textObjetiveG:textObjetiveG });
+          break;
+        case 3:
+          var textObjetiveE = $('#textObjetiveE').val();
+          $("#objetiveE").load('welcomSend.php', { textObjetiveE:textObjetiveE });
+          break;
+
+        default: break;
+      } 
+
+    }
   </script>
 </body>
 </html>

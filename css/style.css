@@ -207,16 +207,23 @@ nav {
 #blog_container h4.select {
   width: 475px;}
 
-#welcome ul{
+.welcome input.edit {
+  display: none;
   float: right;
-  background: white;
 }
 
-#welcome ul li a{
-  color: black;
+.welcome:hover input.edit {
+  display: block;
 }
 
-#edit {
+p.name {
+  padding: 0;
+}
+h3.state {
+  padding: 0 0 20px 0;
+}
+
+#textHome, #textObjetiveG, #textObjetiveE, #textMision, #textVision, .textEdit {
   width: 405px; 
   height: 162px;
 }

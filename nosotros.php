@@ -49,13 +49,17 @@ $consulta = $db->consulta("	SELECT descripcion_informacion
       </div>
       <div id="content">
         <h1>Mision</h1>
-        <p><?php $resultados = $db->fetch_array($consulta);
+        <p class="welcome" id="mision"><?php $resultados = $db->fetch_array($consulta);
         		echo $resultados['descripcion_informacion']."<br />";
-        	?></p>
+        	?>
+          <input type="button" class="edit" value="Editar" onclick='edit(4)' />
+        </p>
         <h1>Vision</h1>
-        <p><?php $resultados = $db->fetch_array($consulta);
+        <p class="welcome" id="vision" ><?php $resultados = $db->fetch_array($consulta);
         		echo $resultados['descripcion_informacion']."<br />";
-        	?></p>
+        	?>
+          <input type="button" class="edit" value="Editar" onclick='edit(5)' />
+        </p>
       </div>
     </div>
     <footer>
@@ -75,6 +79,41 @@ $consulta = $db->consulta("	SELECT descripcion_informacion
         speed: 700
       });
     });
+  </script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript">
+    function edit(edit) { 
+      //alert($(".welcome:last").text());
+      switch(edit){
+        case 4:
+          var mision = $(".welcome:first").text(); 
+          $("#mision").load('welcomEdit.php #editMision', {  mision:mision });
+          break;
+        case 5:
+          var vision = $(".welcome:last").text();
+          $("#vision").load('welcomEdit.php #editVision', { vision:vision });
+          break;
+
+        default: break;
+      } 
+    }
+    function send(send) { 
+      //alert($('#textObjetiveE').val());
+      switch(send){
+        case 4: 
+          var textMision = $('#textMision').val();
+          $("#mision").load('welcomSend.php', { textMision:textMision});
+          break;
+        case 5:
+          var textVision = $('#textVision').val();
+          $("#vision").load('welcomSend.php', { textVision:textVision });
+          break;
+
+        default: break;
+      } 
+
+    }
+
   </script>
 </body>
 </html>

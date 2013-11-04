@@ -3,9 +3,9 @@
 include("conexion.php");
 
 $db = new MySQL();
-$consulta = $db->consulta(" SELECT nombre_integrante, apellido_integrante,
-                                   usuario, password 
-                            FROM   integrante");
+$consulta = $db->consulta(" SELECT  idIntegrante, nombre_integrante, 
+                                    apellido_integrante, usuario, password 
+                            FROM    integrante");
 ?>
 
 <!DOCTYPE HTML>
@@ -51,7 +51,12 @@ $consulta = $db->consulta(" SELECT nombre_integrante, apellido_integrante,
         
         <ul>
         <?php while($resultados = $db->fetch_array($consulta)){ ?>
-          <li><h2><?php echo $resultados['nombre_integrante'].$resultados['apellido_integrante']; ?></h2></li>
+          
+          <li><h2><p class="welcome name" > <input type="button"  class="edit" value="Editar" 
+            onclick="edit('<?php echo $resultados['idIntegrante']; ?>')" />
+            <?php echo $resultados['nombre_integrante']   ?></p>
+          <span class="lastname" ><?php echo $resultados['apellido_integrante'] ?></span></h2></li>
+        
         <?php } ?>
         </ul>
         <p></p>
@@ -75,6 +80,27 @@ $consulta = $db->consulta(" SELECT nombre_integrante, apellido_integrante,
         speed: 700
       });
     });
+  </script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript">
+    function edit(idIntegrante) {
+      idIntegrante  = idIntegrante - 1;
+      //alert(idIntegrante);
+      var nombre    = ( $("p.welcome").eq(idIntegrante) ).text();
+      var apellido  = ( $("span.lastname").eq(idIntegrante) ).text();
+
+      ( $("span.lastname").eq(idIntegrante) ).text(""); 
+      ( $("p.welcome").eq(idIntegrante) ).load("welcomEdit.php #editIntegrante", {idIntegrante:idIntegrante,
+                                                                    nombre:nombre, apellido:apellido });      
+    }
+    function send(idIntegrante) {
+      var textnombre    = ( $("#nombre"+idIntegrante) ).val();
+      var textapellido  = ( $("#apellido"+idIntegrante) ).val();
+ 
+      ( $("p.welcome").eq(idIntegrante) ).load("welcomSend.php", {idIntegrante:idIntegrante,
+                                                                textnombre:textnombre, textapellido:textapellido });
+      ( $("span.lastname").eq(idIntegrante) ).text(textapellido);      
+    }
   </script>
 </body>
 </html>

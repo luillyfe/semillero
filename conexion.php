@@ -32,4 +32,9 @@
    return $this->total_consultas; 
   }
 
+  public function close(){
+   mysql_close($conexion);
+  }
+
+
 }?>

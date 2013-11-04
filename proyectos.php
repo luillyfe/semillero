@@ -3,9 +3,9 @@
 include("conexion.php");
 
 $db = new MySQL();
-$consulta = $db->consulta(" SELECT nombre_proyecto, estado_proyecto, descripcion_proyecto,
-                                   inicio_proyecto, fin_proyecto 
-                            FROM proyecto");
+$consulta = $db->consulta(" SELECT  idProyecto, nombre_proyecto, estado_proyecto, 
+                                    descripcion_proyecto, inicio_proyecto, fin_proyecto 
+                            FROM    proyecto");
 ?>
 
 <!DOCTYPE HTML>
@@ -50,13 +50,18 @@ $consulta = $db->consulta(" SELECT nombre_proyecto, estado_proyecto, descripcion
         <h1>Líneas de investigación:</h1>
         <div id="blog_container">
         <?php while($resultados = $db->fetch_array($consulta)){ ?>
-          <div class="blog"><h2>Nov</h2><h3><?php echo substr($resultados['inicio_proyecto'], 0, 10 ); ?></h3></div>
+          
+          <div class="blog"><h2>Fin</h2><h3><?php echo substr($resultados['fin_proyecto'], 0, 10 ); ?></h3></div>
           <h4 class="select"><a href="#"><?php echo $resultados['nombre_proyecto']; ?></a></h4>
-          <p><?php echo $resultados['descripcion_proyecto']; ?></p>
-          <h3><?php echo $resultados['estado_proyecto']; ?></h3>
-          </div>
-          <p></p>
+          <p class="welcome"><?php echo $resultados['descripcion_proyecto']; ?>
+              <input type="button"  class="edit" value="Editar" 
+          onclick="edit('<?php echo $resultados['idProyecto']; ?>')" /></p>
+          <h3 class="begin"><?php echo substr($resultados['inicio_proyecto'], 0, 10 ); ?></h3>
+          <h3 class="state"><?php echo $resultados['estado_proyecto']; ?></h3>
+        
         <?php } ?>
+        </div>
+
       </div>
     </div>
     <footer>
@@ -76,6 +81,38 @@ $consulta = $db->consulta(" SELECT nombre_proyecto, estado_proyecto, descripcion
         speed: 700
       });
     });
+  </script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript">
+    function edit(index) {
+      index = index-1;
+      var finProyecto     = ( $("div.blog h3").eq(index) ).text();
+      var inicioProyecto  = ( $("h3.begin").eq(index) ).text();
+      var tituloProyecto  = ( $("h4.select").eq(index) ).text();
+      var proyecto        = ( $("p.welcome").eq(index) ).text();
+      var estado          = ( $("h3.state").eq(index) ).text();
+
+      ( $("h3.begin").eq(index) ).text("");
+      ( $("h3.state").eq(index) ).text("");
+      ( $("h4.select").eq(index) ).text("");
+      ( $("div.blog h3").eq(index) ).text("");
+      ( $("p.welcome").eq(index) ).load('welcomEdit.php #editProyecto', {  proyecto:proyecto, index:index,
+            inicioProyecto:inicioProyecto, estado:estado, tituloProyecto:tituloProyecto, finProyecto:finProyecto });
+    }
+    function send(index) {
+      var textinicio    = ( $("#inicio"+index) ).val();
+      var texttitulo    = ( $("#titulo"+index) ).val();
+      var textfin       = ( $("#fin"+index) ).val();
+      var textproyecto  = ( $("#"+index) ).val();
+      var textestado    = ( $("#estado"+index ) ).val();
+
+      ( $("h3.begin").eq(index) ).text(textinicio);
+      ( $("h3.state").eq(index) ).text(textestado);
+      ( $("h4.select").eq(index) ).text(texttitulo);
+      ( $("div.blog h3").eq(index) ).text(textfin);
+      ( $("p.welcome").eq(index) ).load('welcomSend.php', {  textproyecto:textproyecto, index:index,
+                            textinicio:textinicio, textestado:textestado, texttitulo:texttitulo, textfin:textfin });
+    }
   </script>
 </body>
 </html>

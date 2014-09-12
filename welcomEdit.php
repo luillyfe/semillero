@@ -12,16 +12,15 @@ $edit 			= trim(htmlspecialchars( $_POST['edit'] ));
 $index 			= trim(htmlspecialchars( $_POST['index'] ));
 $idIntegrante 	= trim(htmlspecialchars( $_POST['idIntegrante'] ));
 ?>
-<div class="editInformation" >
-	<textarea class="textEdit" id="textInformation<?= $edit ?>" required>
-	<?= $information ?></textarea>
+<div class="editInformation" id="editInformation<?= $edit ?>" >
+	<textarea class="textEdit" required><?= $information ?></textarea>
 	<input type="button" class="edit" value="Enviar" 
 		onclick="send('<?= $edit ?>')" />
 </div>
 
-<div class="editNotice" >
-	<input type="text" placeholder="titulo" id="titulo<?= $edit; ?>"
-		value="<?= trim( htmlspecialchars($_POST['titulo']) ) ?>" required/>
+<div class="editNotice" id="editNotice<?= $edit; ?>" >
+	<input type="text" placeholder="titulo" 
+	value="<?= trim( htmlspecialchars($_POST['titulo']) ) ?>" required/>
 	<textarea class="textEdit" id="textInformation<?= $edit ?>" required>
 	<?= $information ?></textarea>
 	<input type="button" class="edit" value="Enviar" 
@@ -42,10 +41,10 @@ $idIntegrante 	= trim(htmlspecialchars( $_POST['idIntegrante'] ));
 	<input type="button" class="edit" value="Enviar" onclick="send('<?= $index; ?>')" />
 </div>
 
-<div class="editIntegrante" >
-	<input type="text" placeholder="nombre" id="nombre<?= $idIntegrante; ?>" 
+<div class="editIntegrante" id="editIntegrante<?= $idIntegrante; ?>" >
+	<input type="text" placeholder="nombre"  
 		value="<?= trim(htmlspecialchars( $_POST['nombre'] )) ?>" required/>
-	<input type="text" placeholder="apellido" id="apellido<?= $idIntegrante; ?>" 
+	<input type="text" placeholder="apellido"  
 		value="<?= trim(htmlspecialchars( $_POST['apellido'] )) ?>" required/>
 	<input type="button" class="edit" value="Enviar" onclick="send('<?= $idIntegrante; ?>')" />
 </div>

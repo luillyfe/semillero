@@ -9,14 +9,14 @@ endif;
 if( !empty($_POST["title"]) ):
   include("../db/conexion.php");
   $db = new MySQL();
-  $db->consulta(" INSERT INTO proyecto (nombre_proyecto, estado_proyecto, 
+  $db->consulta(" INSERT INTO Proyecto (nombre_proyecto, estado_proyecto, 
                               descripcion_proyecto, inicio_proyecto, fin_proyecto, 
                               Integrante_idIntegrante)
                   VALUES('".$_POST["title"]."','".$_POST["state"]."',
                         '".$_POST["description"]."','".$_POST["beginProject"]."',
                         '".$_POST["endProject"]."',".$_SESSION["id"].") ");
 
-  header("Location: /semillero/semillero/proyectos.php");
+  header("Location: /semillero/proyectos.php");
 endif;
 
 ?>

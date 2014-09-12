@@ -6,7 +6,7 @@ if( empty($_SESSION["id"]) ):
 	exit ("No autorizado");
 endif;
 
-include("/db/conexion.php");
+include("db/conexion.php");
 $db = new MySQL();
 
 $textInformation = empty($_POST['textInformation'])?	'' :trim(htmlspecialchars($_POST['textInformation']));
@@ -25,10 +25,9 @@ $index    	  = $index + 1;
 $idIntegrante = empty($_POST['idIntegrante'])? 	''	:trim(htmlspecialchars( $_POST['idIntegrante'] ));
 $textnombre	  = empty($_POST['textnombre'])? 	''	:trim(htmlspecialchars( $_POST['textnombre'] ));
 $textapellido = empty($_POST['textapellido'])? 	''	:trim(htmlspecialchars( $_POST['textapellido'] ));
-$idIntegrante = $idIntegrante + 1; 
 
 if ( $textInformation <> '' ): 
-	$db->consulta(" UPDATE informacion 
+	$db->consulta(" UPDATE Informacion 
 					SET descripcion_informacion='".$textInformation."',
 						Integrante_idIntegrante=".$_SESSION["id"]." 
 					WHERE idInformacion=".$send." ");
@@ -38,18 +37,19 @@ if ( $textInformation <> '' ):
 
 <?php
 elseif ( $textNotice <> '' ): 
-	$db->consulta(" UPDATE informacion 
+	$db->consulta(" UPDATE Informacion 
 					SET descripcion_informacion='".$textNotice."',
 						titulo_informacion='".$textTitulo."',
 						Integrante_idIntegrante=".$_SESSION["id"]." 
 					WHERE idInformacion=".$send." ");
-	echo $textNotice;
+	echo "<h1>".$textTitulo."</h1>";
+	echo "<p>".$textNotice."</p>";
 ?>
 <input type="button" class="edit" value="editar" onclick='edit(<?= $send ?>)' />
 
 <?php
 elseif ( $textproyecto <> '' ): 
-	$db->consulta(" UPDATE proyecto 
+	$db->consulta(" UPDATE Proyecto 
                 	SET descripcion_proyecto='".$textproyecto."',
                 		nombre_proyecto='".$texttitulo."',
                 		fin_proyecto='".$textfin."',
@@ -63,13 +63,14 @@ elseif ( $textproyecto <> '' ):
 
 <?php
 elseif ( $textnombre <> '' ): 
-	$db->consulta(" UPDATE integrante 
+	$db->consulta(" UPDATE Integrante 
                 	SET nombre_integrante='".$textnombre."',
                 		apellido_integrante='".$textapellido."'
                 	WHERE idIntegrante=".$idIntegrante." ");
-	echo $textnombre;
+	echo "<h2><p class='name'>".$textnombre."</p>";
+	echo "<input type='button' class='edit' value='Editar' onclick='edit('".$idIntegrante."')' />";
+	echo "<span class='lastname'>".$textapellido."</span></h2>";
 ?>
-<input type="button" class="edit" value="Editar" onclick="edit('<?= $idIntegrante; ?>')" />
 
 <?php else: echo exit("ERROR"); ?>
 <?php endif; ?>

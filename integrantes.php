@@ -1,12 +1,12 @@
 <?php
 
 session_start();
-include("/db/conexion.php");
+include("db/conexion.php");
 
 $db = new MySQL();
 $consulta = $db->consulta(" SELECT  idIntegrante, nombre_integrante, 
                                     apellido_integrante, usuario, password 
-                            FROM    integrante");
+                            FROM    Integrante");
 ?>
 
 <!DOCTYPE HTML>
@@ -56,12 +56,15 @@ $consulta = $db->consulta(" SELECT  idIntegrante, nombre_integrante,
       <div id="content">
         <h1>Quienes somos</h1>
         <ul>
+
         <?php while($resultados = $db->fetch_array($consulta)){ ?>          
-          <li><h2><p class="welcome name" > <input type="button"  class="edit" value="Editar" 
-            onclick="edit('<?= $resultados['idIntegrante']; ?>')" />
-            <?php echo $resultados['nombre_integrante']   ?></p>
+          <li class="welcome" id="integrante<?= $resultados['idIntegrante']; ?>" >
+            <h2><p class="name" ><?php echo $resultados['nombre_integrante']   ?></p> 
+            <input type="button"  class="edit" value="Editar" 
+              onclick="edit('<?= $resultados['idIntegrante']; ?>')" />
           <span class="lastname" ><?= $resultados['apellido_integrante'] ?></span></h2></li>        
         <?php } ?>
+        
         </ul>
         <p></p>
         <?php if( !empty($_SESSION["id"]) ) { echo "<input type='button' id='new' value='Nuevo'
@@ -89,26 +92,22 @@ $consulta = $db->consulta(" SELECT  idIntegrante, nombre_integrante,
   </script>
   <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
   <script type="text/javascript">
-    function edit(idIntegrante) {
-      <?php if( empty($_SESSION["id"]) ):
-                  echo "edit = .()(/0;";  
-            endif; ?>
-      idIntegrante  = idIntegrante - 1;
-      //alert(idIntegrante);
-      var nombre    = ( $("p.welcome").eq(idIntegrante) ).text();
-      var apellido  = ( $("span.lastname").eq(idIntegrante) ).text();
+    <?php if( empty($_SESSION["id"]) ){ echo "edit = .()(/0;"; } ?>
 
-      ( $("span.lastname").eq(idIntegrante) ).text(""); 
-      ( $("p.welcome").eq(idIntegrante) ).load("welcomEdit.php .editIntegrante", {idIntegrante:idIntegrante,
+    function edit(idIntegrante) {
+      var nombre    = $("li#integrante"+idIntegrante+" p").text();
+      var apellido  = $("li#integrante"+idIntegrante+" span").text();
+
+      $("li#integrante"+idIntegrante).load("welcomEdit.php .editIntegrante", {idIntegrante:idIntegrante,
                                                                     nombre:nombre, apellido:apellido });      
     }
+    
     function send(idIntegrante) {
-      var textnombre    = ( $("#nombre"+idIntegrante) ).val();
-      var textapellido  = ( $("#apellido"+idIntegrante) ).val();
+      var textnombre    = $("div#editIntegrante"+idIntegrante+" input:text:first").val();
+      var textapellido  = $("div#editIntegrante"+idIntegrante+" input:text:last").val();
  
-      ( $("p.welcome").eq(idIntegrante) ).load("welcomSend.php", {idIntegrante:idIntegrante,
-                                                                textnombre:textnombre, textapellido:textapellido });
-      ( $("span.lastname").eq(idIntegrante) ).text(textapellido);      
+      $("li#integrante"+idIntegrante).load("welcomSend.php", {idIntegrante:idIntegrante,
+                                                                textnombre:textnombre, textapellido:textapellido });     
     }
 
     function nuevo(){

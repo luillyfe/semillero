@@ -3,11 +3,11 @@ session_start();
 if ( !isset($_SESSION['autor']) ){ $_SESSION['autor'] = array_fill(0, 100, "Inicia session"); }
 
 
-include("/db/conexion.php");
+include("db/conexion.php");
 $db = new MySQL();
 $information = $db->consulta("SELECT  idInformacion, titulo_informacion, 
                                       descripcion_informacion, Integrante_idIntegrante 
-                              FROM    informacion 
+                              FROM    Informacion 
                               WHERE   titulo_informacion = 'Bienvenidos al semillero' 
                               OR      titulo_informacion = 'Objetivo general'
                               OR      titulo_informacion = 'Objetivos especificos'");
@@ -41,10 +41,8 @@ $information = $db->consulta("SELECT  idInformacion, titulo_informacion,
           <li><a href="informacion.php">Mas+</a></li>
           <?php if( empty($_SESSION["id"]) ):
                   echo "<li><a href='signin.php'>Sign in</a></li>";
-
                 else: echo "<li><a href='signout.php'>Sign out</a></li>";   
-                endif; 
-          ?>
+          endif; ?>
         </ul>
       </nav>
     </header>
@@ -64,23 +62,21 @@ $information = $db->consulta("SELECT  idInformacion, titulo_informacion,
       <div id="content">
         <?php for($i=0; $i<3; $i++): 
                 $rowInformation = $db->fetch_array($information); ?>
-      <div id="" >
-        <h1><?= $rowInformation['titulo_informacion']; ?></h1>
-        <p class="welcome" id="information<?= $rowInformation['idInformacion']; ?>" >
-          <?= $rowInformation['descripcion_informacion']; ?>
-          <input type="button" class="edit" value="Editar" 
-            onclick="edit('<?= $rowInformation['idInformacion']; ?>')" />
-          <input type="button" class="edit" 
-            value="<?= $_SESSION['autor'][$rowInformation['Integrante_idIntegrante']]; ?>" />
-        </p> <?php endfor; ?>
-      </div>
-      
+          <div class="welcome" id="information<?= $rowInformation['idInformacion']; ?>" >
+            <h1><?= $rowInformation['titulo_informacion']; ?></h1>
+            <p> <?= $rowInformation['descripcion_informacion']; ?>
+              <input type="button" class="edit" value="Editar" 
+                onclick="edit('<?= $rowInformation['idInformacion']; ?>')" />
+              <input type="button" class="edit" 
+                value="<?= $_SESSION['autor'][$rowInformation['Integrante_idIntegrante']]; ?>" /></p>
+        </div><?php endfor; ?>      
       </div>
     </div>
     <footer>
-      <p><a href="index.php">AdiTIC</a> | <a href="nosotros.php">Nosotros</a> | <a href="integrantes.php">Integrantes</a> 
-      | <a href="proyectos.php">Proyectos</a> | <a href="informacion.php">Mas+</a> |
-      <p>Copyright &copy; CSS3_grass | <a href="http://www.css3templates.co.uk">design from css3templates.co.uk</a></p>
+      <p><a href="index.php">AdiTIC</a> | <a href="nosotros.php">Nosotros</a> 
+      | <a href="integrantes.php">Integrantes</a> | <a href="proyectos.php">Proyectos</a> 
+      | <a href="informacion.php">Mas+</a> | <p>Copyright &copy; CSS3_grass 
+      | <a href="http://www.css3templates.co.uk">design from css3templates.co.uk</a></p>
     </footer>
   </div>
   <!-- javascript at the bottom for fast page loading -->
@@ -101,15 +97,26 @@ $information = $db->consulta("SELECT  idInformacion, titulo_informacion,
   
   <script type="text/javascript">
     <?php if( empty($_SESSION["id"]) ) { echo "!·$%&)/)=?¿"; } ?>
-
+    
+    /*
+     * Captura el texto de la informacion (a través de su id) y 
+     * lo coloca sobre un elemento editable  
+     */
     function edit(edit) {
-      var information = $("p#information"+edit).text();
-      $("p#information"+edit).load('welcomEdit.php .editInformation', {  information:information, edit:edit });
+      var information = $("div#information"+edit+" p").text();
+      $("div#information"+edit+" p").load('welcomEdit.php .editInformation', 
+                                    { information:information, edit:edit });    
     }
 
+    /*
+     * Captura el texto del elemento editable (a través de su id) y
+     * lo envia a un script capaz de realizar actualizaciones en la db.
+     * Inmediatament escribe el texto enviado, en la pantalla.   
+     */
     function send(send) { 
-      var textInformation = $("#textInformation"+send).val();
-      $("p#information"+send).load('welcomSend.php', {  textInformation:textInformation, send:send });
+      var textInformation = $("div#editInformation"+send+" textarea").val();
+      $("div#information"+send+" p").load('welcomSend.php', 
+                                    { textInformation:textInformation, send:send });
     }
   </script>
 

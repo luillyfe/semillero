@@ -9,12 +9,12 @@ endif;
 if( !empty($_POST["nameU"]) ):
   include("../db/conexion.php");
   $db = new MySQL();
-  $db->consulta(" INSERT INTO integrante (nombre_integrante, 
+  $db->consulta(" INSERT INTO Integrante (nombre_integrante, 
                               apellido_integrante, usuario, password)
                   VALUES('".$_POST["nameU"]."','".$_POST["lastname"]."',
                         '".$_POST["user"]."','".$_POST["password"]."') ");
 
-  header("Location: /semillero/semillero/integrantes.php");
+  header("Location: /semillero/integrantes.php");
 endif;
 
 ?>

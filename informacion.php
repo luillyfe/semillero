@@ -3,11 +3,11 @@
 session_start();
 if ( !isset($_SESSION['autor']) ){ $_SESSION['autor'] = array_fill(1, 100, "Inicia session"); }
 
-include("/db/conexion.php");
+include("db/conexion.php");
 $db = new MySQL();
 $information = $db->consulta("SELECT  idInformacion, titulo_informacion, 
                                       descripcion_informacion, Integrante_idIntegrante 
-                              FROM    informacion");
+                              FROM    Informacion");
 $lenght = mysql_num_rows($information);
 mysql_data_seek($information, 5);
 ?>
@@ -40,33 +40,35 @@ mysql_data_seek($information, 5);
           <li class="current"><a href="informacion.php">Mas+</a></li>
           <?php if( empty($_SESSION["id"]) ):
                   echo "<li><a href='signin.php'>Sign in</a></li>";
-
                 else: echo "<li><a href='signout.php'>Sign out</a></li>";   
-                endif; 
-          ?>
+          endif; ?>
         </ul>
       </nav>
     </header>
     <div id="site_content">
       <div id="content">
-      <?php for($i=5;$i<$lenght;$i++): $rowInformation = $db->fetch_array( $information ); ?>        
-        <h1 id="titulo<?= $rowInformation['idInformacion']; ?>" >
-          <?= $rowInformation['titulo_informacion'];?></h1>
-        <p class="welcome" id="information<?= $rowInformation['idInformacion']; ?>" > 
-          <?= $rowInformation['descripcion_informacion']; ?>
+
+      <?php for($i=5;$i<$lenght;$i++): $rowInformation = $db->fetch_array( $information ); ?>
+
+      <div class="welcome" id="information<?= $rowInformation['idInformacion']; ?>" >        
+        <h1><?= $rowInformation['titulo_informacion'];?></h1>
+        <p><?= $rowInformation['descripcion_informacion']; ?>
         <input type="button" class="edit" value="Editar" 
           onclick="edit('<?= $rowInformation['idInformacion']; ?>')" />
         <input type="button" class="edit" 
             value="<?= $_SESSION['autor'][$rowInformation['Integrante_idIntegrante']] ?>" /></p>
-      <?php endfor; ?>
+      
+      </div><?php endfor; ?>
       <?php if( !empty($_SESSION["id"]) ) { echo "<input type='button' id='new' value='Nuevo'
             onclick='nuevo()' />"; } ?>  
+      
       </div>     
     </div>
     <footer>
-      <p><a href="index.php">AdiTIC</a> | <a href="nosotros.php">Nosotros</a> | <a href="integrantes.php">Integrantes</a> 
-      | <a href="proyectos.php">Proyectos</a> | <a href="informacion.php">Mas+</a> |
-      <p>Copyright &copy; CSS3_grass | <a href="http://www.css3templates.co.uk">design from css3templates.co.uk</a></p>
+      <p><a href="index.php">AdiTIC</a> | <a href="nosotros.php">Nosotros</a> 
+      | <a href="integrantes.php">Integrantes</a> | <a href="proyectos.php">Proyectos</a> 
+      | <a href="informacion.php">Mas+</a> | <p>Copyright &copy; CSS3_grass 
+      | <a href="http://www.css3templates.co.uk">design from css3templates.co.uk</a></p>
     </footer>
   </div>
   <!-- javascript at the bottom for fast page loading -->
@@ -88,21 +90,19 @@ mysql_data_seek($information, 5);
   <?php if( empty($_SESSION["id"]) ) { echo "!·$%&)/)=?¿"; } ?>
 
     function edit(edit) {
-      var information = $("p#information"+edit).text();
-      var titulo = $("h1#titulo"+edit).text();
+      var information = $("div#information"+edit+" p").text();
+      var titulo      = $("div#information"+edit+" h1").text();
 
-      $("p#information"+edit).load('welcomEdit.php .editNotice', {  information:information, edit:edit,
-                                                                          titulo:titulo });
-      $("h1#titulo"+edit).text("");
+      $("div#information"+edit).load('welcomEdit.php .editNotice', {  information:information, edit:edit,
+                                                                          titulo:titulo });    
     }
 
-    function send(send) { 
-      var textTitulo = $("input#titulo"+send).val();
-      var textNotice = $("#textInformation"+send).val();
-
-      $("p#information"+send).load('welcomSend.php', {  textNotice:textNotice, send:send,
+    function send(send) {
+      var textTitulo = $("div#editNotice"+send+" input:text").val();
+      var textNotice = $("div#editNotice"+send+" textarea").val();
+      
+      $("div#information"+send).load('welcomSend.php', {  textNotice:textNotice, send:send,
                                                           textTitulo:textTitulo });
-      $("h1#titulo"+send).text( $("input#titulo"+send).val() );
     }
 
     function nuevo() {

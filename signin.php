@@ -4,16 +4,16 @@ session_start();
 if( empty($_POST["user"]) ):
   if( !isset($_SESSION["id"]) ):
     echo "No se ha iniciado session";
-  else: header("Location: /semillero/semillero/");
+  else: header("Location: /semillero/");
   endif;
 
 else:
-  include("/db/conexion.php");
+  include("db/conexion.php");
   $db = new MySQL();
 
   $consulta = $db->consulta(" SELECT  idIntegrante, nombre_integrante, 
                                       apellido_integrante, usuario, password 
-                              FROM    integrante
+                              FROM    Integrante
                               WHERE   usuario='".$_POST["user"]."'
                               AND     password='".$_POST["password"]."' ");
 
@@ -26,7 +26,7 @@ else:
 
     $autor = $db->consulta("SELECT  idIntegrante, nombre_integrante, 
                                 apellido_integrante, usuario, password 
-                        FROM    integrante");
+                        FROM    Integrante");
 
     $lenght = mysql_num_rows($autor);
     for ( $i=0; $i < $lenght; $i++ ){
@@ -34,7 +34,7 @@ else:
       $data[$idautor[0]] = $idautor[1]; 
     }
     $_SESSION['autor'] = $data;
-    header("Location: /semillero/semillero/");
+    header("Location: /semillero/");
 
     else: echo "La combinacion usuario/contrasena es invalida";
 

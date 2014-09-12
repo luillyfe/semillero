@@ -1,0 +1,39 @@
+/* 
+    Document   : fondomovil
+    Created on : 28-abr-2013, 12:26:15
+    Author     : stivenson
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+
+/* Center the website */
+#wrapper_2{
+    width:100%;
+    margin:0 auto;
+}
+
+/* Give the header a height and a background image */
+#headere_2{
+    height:100%; 
+    background: #fff url(background.jpg) repeat-y scroll left top;
+    text-align:center;
+}
+
+/* Create a Shadow Overlay */ 
+#headere_2 div{
+    width:100%;
+    height:100%;
+    background: transparent url(overlay.png) no-repeat scroll left top;
+}
+
+/* Vertically position header text and style it*/
+#headere_2 h1{
+    padding-top:0px;
+    font-family: Arial, "MS Trebuchet", sans-serif;
+    color:white;
+}
+
+/* Give basic styles to the body and the navigation */
+
+

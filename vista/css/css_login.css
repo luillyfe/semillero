@@ -1,0 +1,91 @@
+/* 
+    Document   : css_login
+    Created on : 28-abr-2013, 13:31:02
+    Author     : stivenson
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+
+/*ESTILOS DEL POPUP INICIAR SESIÓN*/
+
+#popupContact {
+	display: none;
+	position: absolute;
+	_position: absolute; /* hack for internet explorer 6*/
+	width: 500px;
+	background: #FFFFFF;
+	border: 2px solid #cecece;
+	z-index: 2;
+	padding: 0px;
+	font-size: 13px;
+        /*left: 110.5px;*/
+        
+
+   
+
+    border:ridge 8px #0080f0;
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-topright:0px;
+    -moz-border-radius-bottomleft:0px;
+    -moz-border-radius-bottomright:0px;
+    -webkit-border-top-left-radius:0px;
+    -webkit-border-top-right-radius:0px;
+    -webkit-border-bottom-left-radius:0px;
+    -webkit-border-bottom-right-radius:0px;
+    border-top-left-radius:0px;
+    border-top-right-radius:0px;
+    border-bottom-left-radius:0px;
+    border-bottom-right-radius:0px;
+
+
+
+
+}
+
+.negritaaderecha{
+    
+ font-weight: bold; 
+ text-align: right;
+    
+}
+
+#popupContact h1 {
+	text-align: left;
+	color: #6FA5FD;
+	font-size: 22px;
+	font-weight: 700;
+	border-bottom: 1px dotted #D3D3D3;
+	padding-bottom: 2px;
+	margin-bottom: 20px;
+}
+
+#popupContactClose {
+	font-size: 14px;
+	line-height: 14px;
+	right: 0px;
+	position: absolute;
+	color: #6fa5fd;
+	font-weight: 500;
+	display: block;
+	cursor: pointer;
+}
+
+
+#backgroundPopup {
+    
+	display: none;
+	position: fixed;
+	_position: absolute; /* hack for internet explorer 6*/
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0px;
+	background: #000000;
+	border: 1px solid #cecece;
+	z-index: 1;
+       
+}
+
+
+/*********************************/

@@ -3,11 +3,11 @@
 session_start();
 if ( !isset($_SESSION['autor']) ){ $_SESSION['autor'] = array_fill(1, 100, "Inicia session"); }
 
-include("/db/conexion.php");
+include("db/conexion.php");
 $db = new MySQL();
 $information = $db->consulta("SELECT idInformacion, titulo_informacion,
                                   descripcion_informacion, Integrante_idIntegrante
-							               FROM informacion 
+							               FROM Informacion 
 							               WHERE titulo_informacion = 'Mision' 
 							               OR titulo_informacion = 'Vision'");
 ?>
@@ -57,15 +57,18 @@ $information = $db->consulta("SELECT idInformacion, titulo_informacion,
         </div>
       </div>
       <div id="content">
+
         <?php for($i=0;$i<2;$i++): $rowInformation = $db->fetch_array($information) ?>
-        <h1><?= $rowInformation['titulo_informacion'] ?></h1>
-        <p class="welcome" id="information<?= $rowInformation['idInformacion'] ?>">
-          <?= $rowInformation['descripcion_informacion'] ?>
-          <input type="button" class="edit" value="Editar" 
-            onclick="edit('<?= $rowInformation['idInformacion'] ?>')" />
-          <input type="button" class="edit" 
-            value="<?= $_SESSION['autor'][$rowInformation['Integrante_idIntegrante']] ?>" />
-        </p><?php endfor; ?>       
+        <div class="welcome" id="information<?= $rowInformation['idInformacion']; ?>">
+          <h1><?= $rowInformation['titulo_informacion'] ?></h1>
+          <p><?= $rowInformation['descripcion_informacion'] ?>
+             <input type="button" class="edit" value="Editar" 
+                onclick="edit('<?= $rowInformation['idInformacion'] ?>')" />
+             <input type="button" class="edit" 
+                value="<?= $_SESSION['autor'][$rowInformation['Integrante_idIntegrante']] ?>" /></p>
+
+        </div><?php endfor; ?>       
+
       </div>
     </div>
     <footer>
@@ -92,13 +95,13 @@ $information = $db->consulta("SELECT idInformacion, titulo_informacion,
     <?php if( empty($_SESSION["id"]) ) { echo "!·$%&)/)=?¿"; } ?>
 
     function edit(edit) {
-      var information = $("p#information"+edit).text();
-      $("p#information"+edit).load("welcomEdit.php .editInformation", { information:information, edit:edit });
+      var information = $("div#information"+edit+" p").text();
+      $("div#information"+edit+" p").load("welcomEdit.php .editInformation", { information:information, edit:edit });
     }
             
     function send(send) { 
-      var textInformation = $('#textInformation'+send).val();
-      $('p#information'+send).load( 'welcomSend.php', { textInformation:textInformation, send:send });
+      var textInformation = $('div#editInformation'+send+" textarea").val();
+      $('div#information'+send+" p").load( 'welcomSend.php', { textInformation:textInformation, send:send });
     }
   </script>
 </body>

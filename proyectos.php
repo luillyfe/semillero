@@ -3,11 +3,11 @@
 session_start();
 if ( !isset($_SESSION['autor']) ){ $_SESSION['autor'] = array_fill(1, 100, "Inicia session"); }
 
-include("/db/conexion.php");
+include("db/conexion.php");
 $db = new MySQL();
 $consulta = $db->consulta(" SELECT  idProyecto, nombre_proyecto, estado_proyecto, Integrante_idIntegrante,
                                     descripcion_proyecto, inicio_proyecto, fin_proyecto 
-                            FROM    proyecto");
+                            FROM    Proyecto");
 ?>
 
 <!DOCTYPE HTML>
@@ -56,6 +56,7 @@ $consulta = $db->consulta(" SELECT  idProyecto, nombre_proyecto, estado_proyecto
       <div id="content">
         <h1>Líneas de investigación:</h1>
         <div id="blog_container">
+
         <?php while($resultados = $db->fetch_array($consulta)){ ?>          
           <div class="blog"><h2>Fin</h2><h3><?php echo substr($resultados['fin_proyecto'], 0, 10 ); ?></h3></div>
           <h4 class="select"><a href="#"><?php echo $resultados['nombre_proyecto']; ?></a></h4>
@@ -69,6 +70,7 @@ $consulta = $db->consulta(" SELECT  idProyecto, nombre_proyecto, estado_proyecto
         <?php } ?>
         <?php if( !empty($_SESSION["id"]) ) { echo "<input type='button' id='new' value='Nuevo'
             onclick='nuevo()' />"; } ?>  
+        
         </div>
 
       </div>
